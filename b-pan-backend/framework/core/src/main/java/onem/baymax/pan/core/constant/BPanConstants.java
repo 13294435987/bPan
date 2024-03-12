@@ -66,7 +66,7 @@ public interface BPanConstants {
     /**
      * 组件扫描基础路径
      */
-    String BASE_COMPONENT_SCAN_PATH = "com.imooc.pan";
+    String BASE_COMPONENT_SCAN_PATH = "onem.baymax.pan";
 
     /**
      * 问号常量
