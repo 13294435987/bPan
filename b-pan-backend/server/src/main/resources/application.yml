@@ -21,3 +21,15 @@ management:
       exposure:
         include: '*'
         exclude: env,beans
+
+swagger2:
+  show: true
+  group-name: ${spring.application.name}
+  base-package: onem.baymax.pan
+  title: b-pan-server docs
+  description: b-pan-server docs
+  terms-of-service-url: http://127.0.0.1:${server.port}
+  contact-name: baymax
+  contact-url: none
+  contact-email: none
+  version: 1.0

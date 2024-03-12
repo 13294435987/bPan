@@ -1,5 +1,6 @@
 package onem.baymax.pan.server;
 
+import io.swagger.annotations.Api;
 import onem.baymax.pan.core.constant.BPanConstants;
 import onem.baymax.pan.core.response.R;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication(scanBasePackages = BPanConstants.BASE_COMPONENT_SCAN_PATH)
 @ServletComponentScan(basePackages = BPanConstants.BASE_COMPONENT_SCAN_PATH)
 @RestController
+@Api("test-api-hello")
 public class BPanServerLauncher {
 
     public static void main(String[] args) {
