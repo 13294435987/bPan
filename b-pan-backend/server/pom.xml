@@ -34,17 +34,17 @@
         </dependency>
         <!--        <dependency>-->
         <!--            <groupId>onem.baymax.pan</groupId>-->
-        <!--            <artifactId>r-pan-mybatis-plus</artifactId>-->
+        <!--            <artifactId>b-pan-mybatis-plus</artifactId>-->
         <!--            <version>1.0</version>-->
         <!--        </dependency>-->
         <!--        <dependency>-->
         <!--            <groupId>onem.baymax.pan</groupId>-->
-        <!--            <artifactId>r-pan-schedule</artifactId>-->
+        <!--            <artifactId>b-pan-schedule</artifactId>-->
         <!--            <version>1.0</version>-->
         <!--        </dependency>-->
         <!--        <dependency>-->
         <!--            <groupId>onem.baymax.pan</groupId>-->
-        <!--            <artifactId>r-pan-cache-redis</artifactId>-->
+        <!--            <artifactId>b-pan-cache-redis</artifactId>-->
         <!--            <version>1.0</version>-->
         <!--        </dependency>-->
         <dependency>
@@ -53,17 +53,17 @@
         </dependency>
         <!--        <dependency>-->
         <!--            <groupId>onem.baymax.pan</groupId>-->
-        <!--            <artifactId>r-pan-storage-engine-local</artifactId>-->
+        <!--            <artifactId>b-pan-storage-engine-local</artifactId>-->
         <!--            <version>1.0</version>-->
         <!--        </dependency>-->
         <!--        <dependency>-->
         <!--            <groupId>onem.baymax.pan</groupId>-->
-        <!--            <artifactId>r-pan-storage-engine-fastdfs</artifactId>-->
+        <!--            <artifactId>b-pan-storage-engine-fastdfs</artifactId>-->
         <!--            <version>1.0</version>-->
         <!--        </dependency>-->
         <!--        <dependency>-->
         <!--            <groupId>onem.baymax.pan</groupId>-->
-        <!--            <artifactId>r-pan-storage-engine-oss</artifactId>-->
+        <!--            <artifactId>b-pan-storage-engine-oss</artifactId>-->
         <!--            <version>1.0</version>-->
         <!--        </dependency>-->
         <dependency>
@@ -74,7 +74,7 @@
     </dependencies>
 
     <build>
-        <finalName>r-pan-server</finalName>
+        <finalName>b-pan-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

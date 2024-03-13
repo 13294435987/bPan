@@ -33,3 +33,8 @@ swagger2:
   contact-url: none
   contact-email: none
   version: 1.0
+
+logging:
+  file: ${user.home}/logs/${spring.application.name}/${spring.application.name}.log
+  level:
+    root: INFO
