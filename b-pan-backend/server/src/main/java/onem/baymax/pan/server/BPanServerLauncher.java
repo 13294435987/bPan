@@ -3,6 +3,8 @@ package onem.baymax.pan.server;
 import io.swagger.annotations.Api;
 import onem.baymax.pan.core.constant.BPanConstants;
 import onem.baymax.pan.core.response.R;
+import onem.baymax.pan.server.module.file.mapper.BPanFileMapper;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -10,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotBlank;
+import javax.annotation.Resource;
 
 /**
  * 主启动类
@@ -22,14 +24,18 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @Api("test-api-hello")
 @Validated
+@MapperScan(basePackages = BPanConstants.BASE_COMPONENT_SCAN_PATH + ".server.module.**.mapper")
 public class BPanServerLauncher {
+
+    @Resource
+    private BPanFileMapper bPanFileMapper;
 
     public static void main(String[] args) {
         SpringApplication.run(BPanServerLauncher.class);
     }
 
     @GetMapping("/hello")
-    public R<String> hello(@NotBlank(message = "name不能为空") String name) {
-        return R.success("hello" + name);
+    public R<String> hello() {
+        return R.success("hello" + bPanFileMapper.selectById("1"));
     }
 }
