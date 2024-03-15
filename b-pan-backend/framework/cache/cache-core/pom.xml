@@ -5,27 +5,29 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>onem.baymax.pan</groupId>
-        <artifactId>b-pan-parent</artifactId>
+        <artifactId>b-pan-framework</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>b-pan-framework</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>core</module>
-        <module>web</module>
-        <module>swagger2</module>
-        <module>orm</module>
-        <module>orm/mybatis-plus</module>
-        <module>cache</module>
-        <module>cache/cache-core</module>
-        <module>cache/cache-caffeine</module>
-    </modules>
+    <artifactId>b-pan-cache-core</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>onem.baymax.pan</groupId>
+            <artifactId>b-pan-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
