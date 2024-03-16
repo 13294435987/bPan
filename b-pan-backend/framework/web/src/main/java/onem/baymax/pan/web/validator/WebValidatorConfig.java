@@ -1,7 +1,7 @@
 package onem.baymax.pan.web.validator;
 
 import lombok.extern.slf4j.Slf4j;
-import onem.baymax.pan.core.constant.BPanConstants;
+import onem.baymax.pan.core.constant.BPanConstant;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +38,7 @@ public class WebValidatorConfig {
     private Validator bPanValidator() {
         ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
                 .configure()
-                .addProperty(FAIL_FAST_KEY, BPanConstants.TRUE_STR)
+                .addProperty(FAIL_FAST_KEY, BPanConstant.TRUE_STR)
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
     }

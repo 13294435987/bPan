@@ -3,7 +3,7 @@ package onem.baymax.pan.cache.redis.test;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import onem.baymax.pan.core.constant.BPanConstants;
+import onem.baymax.pan.core.constant.BPanConstant;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -26,7 +26,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @SpringBootConfiguration
 @EnableCaching
 @Slf4j
-@ComponentScan(value = BPanConstants.BASE_COMPONENT_SCAN_PATH + ".cache.redis.test")
+@ComponentScan(value = BPanConstant.BASE_COMPONENT_SCAN_PATH + ".cache.redis.test")
 public class RedisCacheConfig {
 
     /**

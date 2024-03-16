@@ -2,7 +2,7 @@ package onem.baymax.pan.core.util;
 
 import cn.hutool.core.date.DateUtil;
 import lombok.experimental.UtilityClass;
-import onem.baymax.pan.core.constant.BPanConstants;
+import onem.baymax.pan.core.constant.BPanConstant;
 import onem.baymax.pan.core.exception.BPanBusinessException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,10 +32,10 @@ public class FileUtils {
      * @return 后缀
      */
     public static String getFileSuffix(String filename) {
-        if (StringUtils.isBlank(filename) || filename.lastIndexOf(BPanConstants.POINT_STR) == BPanConstants.MINUS_ONE_INT) {
-            return BPanConstants.EMPTY_STR;
+        if (StringUtils.isBlank(filename) || filename.lastIndexOf(BPanConstant.POINT_STR) == BPanConstant.MINUS_ONE_INT) {
+            return BPanConstant.EMPTY_STR;
         }
-        return filename.substring(filename.lastIndexOf(BPanConstants.POINT_STR)).toLowerCase();
+        return filename.substring(filename.lastIndexOf(BPanConstant.POINT_STR)).toLowerCase();
     }
 
     /**
@@ -45,10 +45,10 @@ public class FileUtils {
      * @return 类型
      */
     public static String getFileExtName(String filename) {
-        if (StringUtils.isBlank(filename) || filename.lastIndexOf(BPanConstants.POINT_STR) == BPanConstants.MINUS_ONE_INT) {
-            return BPanConstants.EMPTY_STR;
+        if (StringUtils.isBlank(filename) || filename.lastIndexOf(BPanConstant.POINT_STR) == BPanConstant.MINUS_ONE_INT) {
+            return BPanConstant.EMPTY_STR;
         }
-        return filename.substring(filename.lastIndexOf(BPanConstants.POINT_STR) + BPanConstants.ONE_INT).toLowerCase();
+        return filename.substring(filename.lastIndexOf(BPanConstant.POINT_STR) + BPanConstant.ONE_INT).toLowerCase();
     }
 
     /**
@@ -59,7 +59,7 @@ public class FileUtils {
      */
     public static String byteCountToDisplaySize(Long totalSize) {
         if (Objects.isNull(totalSize)) {
-            return BPanConstants.EMPTY_STR;
+            return BPanConstant.EMPTY_STR;
         }
         return org.apache.commons.io.FileUtils.byteCountToDisplaySize(totalSize);
     }
@@ -188,7 +188,7 @@ public class FileUtils {
                 identifier +
                 File.separator +
                 UUIDUtil.getUuid() +
-                BPanConstants.COMMON_SEPARATOR +
+                BPanConstant.COMMON_SEPARATOR +
                 chunkNumber;
     }
 
@@ -213,7 +213,7 @@ public class FileUtils {
     public static void writeFile2OutputStream(FileInputStream fileInputStream, OutputStream outputStream, long length) throws IOException {
         FileChannel fileChannel = fileInputStream.getChannel();
         WritableByteChannel writableByteChannel = Channels.newChannel(outputStream);
-        fileChannel.transferTo(BPanConstants.ZERO_LONG, length, writableByteChannel);
+        fileChannel.transferTo(BPanConstant.ZERO_LONG, length, writableByteChannel);
         outputStream.flush();
         fileInputStream.close();
         outputStream.close();
@@ -230,8 +230,8 @@ public class FileUtils {
     public static void writeStream2StreamNormal(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] buffer = new byte[1024];
         int len;
-        while ((len = inputStream.read(buffer)) != BPanConstants.MINUS_ONE_INT) {
-            outputStream.write(buffer, BPanConstants.ZERO_INT, len);
+        while ((len = inputStream.read(buffer)) != BPanConstant.MINUS_ONE_INT) {
+            outputStream.write(buffer, BPanConstant.ZERO_INT, len);
         }
         outputStream.flush();
         inputStream.close();

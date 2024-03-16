@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author hujiabin wrote in 2024/3/11 23:00
  */
-public interface BPanConstants {
+public interface BPanConstant {
     /**
      * 公用的字符串分隔符
      */

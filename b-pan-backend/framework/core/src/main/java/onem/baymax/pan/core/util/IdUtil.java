@@ -5,7 +5,7 @@ import cn.hutool.core.util.ArrayUtil;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
-import onem.baymax.pan.core.constant.BPanConstants;
+import onem.baymax.pan.core.constant.BPanConstant;
 import onem.baymax.pan.core.exception.BPanBusinessException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -234,7 +234,7 @@ public class IdUtil {
         if (StringUtils.isBlank(decryptIdStr)) {
             return Lists.newArrayList();
         }
-        List<String> decryptIdList = Splitter.on(BPanConstants.COMMON_SEPARATOR).splitToList(decryptIdStr);
+        List<String> decryptIdList = Splitter.on(BPanConstant.COMMON_SEPARATOR).splitToList(decryptIdStr);
         if (CollectionUtils.isEmpty(decryptIdList)) {
             return Lists.newArrayList();
         }

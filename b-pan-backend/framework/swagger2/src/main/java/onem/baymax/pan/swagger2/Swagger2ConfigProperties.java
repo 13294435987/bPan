@@ -1,7 +1,7 @@
 package onem.baymax.pan.swagger2;
 
 import lombok.Data;
-import onem.baymax.pan.core.constant.BPanConstants;
+import onem.baymax.pan.core.constant.BPanConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class Swagger2ConfigProperties {
 
     private String groupName = "b-pan";
 
-    private String basePackage = BPanConstants.BASE_COMPONENT_SCAN_PATH;
+    private String basePackage = BPanConstant.BASE_COMPONENT_SCAN_PATH;
 
     private String title = "b-pan-server";
 
