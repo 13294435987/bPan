@@ -1,8 +1,8 @@
 package onem.baymax.pan.server.module.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import onem.baymax.pan.server.module.user.enity.BPanUserSearchHistory;
-import onem.baymax.pan.server.module.user.service.BPanUserSearchHistoryService;
+import onem.baymax.pan.server.module.user.entity.BPanUserSearchHistory;
+import onem.baymax.pan.server.module.user.service.IUserSearchHistoryService;
 import onem.baymax.pan.server.module.user.mapper.BPanUserSearchHistoryMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
  * @createDate 2024-03-14 11:30:08
  */
 @Service
-public class BPanUserSearchHistoryServiceImpl extends ServiceImpl<BPanUserSearchHistoryMapper, BPanUserSearchHistory>
-        implements BPanUserSearchHistoryService {
+public class IUserSearchHistoryServiceImpl extends ServiceImpl<BPanUserSearchHistoryMapper, BPanUserSearchHistory>
+        implements IUserSearchHistoryService {
 
 }
 

@@ -1,6 +1,6 @@
 package onem.baymax.pan.server.module.share.service;
 
-import onem.baymax.pan.server.module.share.enity.BPanShare;
+import onem.baymax.pan.server.module.share.entity.BPanShare;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

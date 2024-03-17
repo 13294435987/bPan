@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="onem.baymax.pan.server.module.share.mapper.BPanShareMapper">
 
-    <resultMap id="BaseResultMap" type="onem.baymax.pan.server.module.share.enity.BPanShare">
+    <resultMap id="BaseResultMap" type="onem.baymax.pan.server.module.share.entity.BPanShare">
         <id property="shareId" column="share_id" jdbcType="BIGINT"/>
         <result property="shareName" column="share_name" jdbcType="VARCHAR"/>
         <result property="shareType" column="share_type" jdbcType="TINYINT"/>

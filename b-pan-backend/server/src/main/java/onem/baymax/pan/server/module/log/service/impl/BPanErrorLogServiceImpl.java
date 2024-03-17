@@ -1,7 +1,7 @@
 package onem.baymax.pan.server.module.log.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import onem.baymax.pan.server.module.log.enity.BPanErrorLog;
+import onem.baymax.pan.server.module.log.entity.BPanErrorLog;
 import onem.baymax.pan.server.module.log.service.BPanErrorLogService;
 import onem.baymax.pan.server.module.log.mapper.BPanErrorLogMapper;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package onem.baymax.pan.server.module.log.service;
 
-import onem.baymax.pan.server.module.log.enity.BPanErrorLog;
+import onem.baymax.pan.server.module.log.entity.BPanErrorLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

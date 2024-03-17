@@ -1,7 +1,7 @@
 package onem.baymax.pan.server.module.file.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import onem.baymax.pan.server.module.file.enity.BPanFileChunk;
+import onem.baymax.pan.server.module.file.entity.BPanFileChunk;
 import onem.baymax.pan.server.module.file.service.BPanFileChunkService;
 import onem.baymax.pan.server.module.file.mapper.BPanFileChunkMapper;
 import org.springframework.stereotype.Service;

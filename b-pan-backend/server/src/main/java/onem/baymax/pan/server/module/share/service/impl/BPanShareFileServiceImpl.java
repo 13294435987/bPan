@@ -1,7 +1,7 @@
 package onem.baymax.pan.server.module.share.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import onem.baymax.pan.server.module.share.enity.BPanShareFile;
+import onem.baymax.pan.server.module.share.entity.BPanShareFile;
 import onem.baymax.pan.server.module.share.service.BPanShareFileService;
 import onem.baymax.pan.server.module.share.mapper.BPanShareFileMapper;
 import org.springframework.stereotype.Service;

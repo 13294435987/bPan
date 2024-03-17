@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="onem.baymax.pan.server.module.file.mapper.BPanUserFileMapper">
 
-    <resultMap id="BaseResultMap" type="onem.baymax.pan.server.module.file.enity.BPanUserFile">
+    <resultMap id="BaseResultMap" type="onem.baymax.pan.server.module.file.entity.BPanUserFile">
         <id property="fileId" column="file_id" jdbcType="BIGINT"/>
         <result property="userId" column="user_id" jdbcType="BIGINT"/>
         <result property="parentId" column="parent_id" jdbcType="BIGINT"/>

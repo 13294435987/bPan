@@ -11,6 +11,13 @@
 
     <artifactId>b-pan-cache</artifactId>
 
+    <packaging>pom</packaging>
+    <modules>
+        <module>cache-core</module>
+        <module>cache-caffeine</module>
+        <module>cache-redis</module>
+    </modules>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

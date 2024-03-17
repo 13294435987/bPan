@@ -18,9 +18,6 @@
         <module>orm</module>
         <module>orm/mybatis-plus</module>
         <module>cache</module>
-        <module>cache/cache-core</module>
-        <module>cache/cache-caffeine</module>
-        <module>cache/cache-redis</module>
         <module>schedule</module>
     </modules>
 

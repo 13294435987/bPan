@@ -1,6 +1,6 @@
 package onem.baymax.pan.server.module.file.service;
 
-import onem.baymax.pan.server.module.file.enity.BPanFileChunk;
+import onem.baymax.pan.server.module.file.entity.BPanFileChunk;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
