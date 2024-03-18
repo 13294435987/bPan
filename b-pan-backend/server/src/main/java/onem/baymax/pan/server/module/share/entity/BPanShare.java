@@ -1,4 +1,4 @@
-package onem.baymax.pan.server.module.share.enity;
+package onem.baymax.pan.server.module.share.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

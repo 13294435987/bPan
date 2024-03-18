@@ -1,4 +1,4 @@
-package onem.baymax.pan.server.module.share.enity;
+package onem.baymax.pan.server.module.file.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -11,14 +11,14 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 用户分享文件表
+ * 文件分片信息表
  *
  * @author hujiabin
- * @TableName b_pan_share_file
+ * @TableName b_pan_file_chunk
  */
-@TableName(value = "b_pan_share_file")
+@TableName(value = "b_pan_file_chunk")
 @Data
-public class BPanShareFile implements Serializable {
+public class BPanFileChunk implements Serializable {
     /**
      * 主键
      */
@@ -26,19 +26,31 @@ public class BPanShareFile implements Serializable {
     private Long id;
 
     /**
-     * 分享id
+     * 文件唯一标识
      */
-    @TableField(value = "share_id")
-    private Long shareId;
+    @TableField(value = "identifier")
+    private String identifier;
 
     /**
-     * 文件记录ID
+     * 分片真实的存储路径
      */
-    @TableField(value = "file_id")
-    private Long fileId;
+    @TableField(value = "real_path")
+    private String realPath;
 
     /**
-     * 分享创建人
+     * 分片编号
+     */
+    @TableField(value = "chunk_number")
+    private Integer chunkNumber;
+
+    /**
+     * 过期时间
+     */
+    @TableField(value = "expiration_time")
+    private Date expirationTime;
+
+    /**
+     * 创建人
      */
     @TableField(value = "create_user")
     private Long createUser;
