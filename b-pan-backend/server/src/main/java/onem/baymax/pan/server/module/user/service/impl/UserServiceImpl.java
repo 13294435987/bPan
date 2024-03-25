@@ -10,6 +10,7 @@ import onem.baymax.pan.core.util.JwtUtil;
 import onem.baymax.pan.core.util.PasswordUtil;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
+import onem.baymax.pan.server.module.file.entity.BPanUserFile;
 import onem.baymax.pan.server.module.file.service.IUserFileService;
 import onem.baymax.pan.server.module.user.constant.UserConstant;
 import onem.baymax.pan.server.module.user.context.*;
@@ -120,10 +121,10 @@ public class UserServiceImpl extends ServiceImpl<BPanUserMapper, BPanUser>
             throw new BPanBusinessException("用户信息查询失败");
         }
 
-        // todo
-        // if (Objects.isNull(bPanUserFile)) {
-        //     throw new BPanBusinessException("查询用户根文件夹信息失败");
-        // }
+        BPanUserFile bPanUserFile = userFileService.getUserRootFile(userId);
+        if (Objects.isNull(bPanUserFile)) {
+            throw new BPanBusinessException("查询用户根文件夹信息失败");
+        }
 
         return userConverter.assembleUserInfoVO(entity, null);
     }

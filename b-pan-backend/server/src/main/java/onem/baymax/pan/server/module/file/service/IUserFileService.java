@@ -1,8 +1,12 @@
 package onem.baymax.pan.server.module.file.service;
 
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
+import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
 import com.baomidou.mybatisplus.extension.service.IService;
+import onem.baymax.pan.server.module.file.vo.BPanUserFileVo;
+
+import java.util.List;
 
 /**
  * @author hujiabin
@@ -18,4 +22,20 @@ public interface IUserFileService extends IService<BPanUserFile> {
      * @return 文件ID
      */
     Long createFolder(CreateFolderContext createFolderContext);
+
+    /**
+     * 查询用户的根文件夹信息
+     *
+     * @param userId userId
+     * @return userFile
+     */
+    BPanUserFile getUserRootFile(Long userId);
+
+    /**
+     * 查询用户的文件列表
+     *
+     * @param context context
+     * @return list
+     */
+    List<BPanUserFileVo> getFileList(QueryFileListContext context);
 }
