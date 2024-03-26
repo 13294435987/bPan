@@ -83,7 +83,7 @@ public interface UserConverter {
     @Mapping(source = "bPanUser.username", target = "username")
     @Mapping(source = "bPanUserFile.fileId", target = "rootFileId")
     @Mapping(source = "bPanUserFile.filename", target = "rootFilename")
-    UserInfoVo assembleUserInfoVO(BPanUser bPanUser, BPanUserFile bPanUserFile);
+    UserInfoVo assembleUserInfoVo(BPanUser bPanUser, BPanUserFile bPanUserFile);
 
 }
 

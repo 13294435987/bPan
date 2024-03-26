@@ -126,7 +126,7 @@ public class UserServiceImpl extends ServiceImpl<BPanUserMapper, BPanUser>
             throw new BPanBusinessException("查询用户根文件夹信息失败");
         }
 
-        return userConverter.assembleUserInfoVO(entity, null);
+        return userConverter.assembleUserInfoVo(entity, bPanUserFile);
     }
 
     private void assembleUserEntity(UserRegisterContext userRegisterContext) {

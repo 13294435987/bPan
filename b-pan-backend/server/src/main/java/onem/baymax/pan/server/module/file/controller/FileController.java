@@ -8,14 +8,19 @@ import onem.baymax.pan.core.response.R;
 import onem.baymax.pan.core.util.IdUtil;
 import onem.baymax.pan.server.common.util.UserIdUtil;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
+import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
+import onem.baymax.pan.server.module.file.converter.FileConverter;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
+import onem.baymax.pan.server.module.file.po.CreateFolderPo;
 import onem.baymax.pan.server.module.file.service.IUserFileService;
 import onem.baymax.pan.server.module.file.vo.BPanUserFileVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,10 +44,13 @@ public class FileController {
     @Resource
     private IUserFileService userFileService;
 
+    @Resource
+    private FileConverter fileConverter;
+
     /**
      * 查询文件列表
      *
-     * @param parentId  父文件夹
+     * @param parentId 父文件夹
      * @param fileTypes 文件类型
      * @return vo
      */
@@ -53,8 +61,9 @@ public class FileController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     @GetMapping("files")
-    public R<List<BPanUserFileVo>> list(@NotBlank(message = "父文件夹ID不能为空") @RequestParam(value = "parentId", required = false) String parentId,
-                                        @RequestParam(value = "fileTypes", required = false, defaultValue = FileConstant.ALL_FILE_TYPE) String fileTypes) {
+    public R<List<BPanUserFileVo>> list(
+            @NotBlank(message = "父文件夹ID不能为空") @RequestParam(value = "parentId", required = false) String parentId,
+            @RequestParam(value = "fileTypes", required = false, defaultValue = FileConstant.ALL_FILE_TYPE) String fileTypes) {
         // 加密处理一下
         Long realParentId = IdUtil.decrypt(parentId);
 
@@ -62,7 +71,8 @@ public class FileController {
 
         if (!Objects.equals(FileConstant.ALL_FILE_TYPE, fileTypes)) {
             fileTypeArray = Arrays.stream(StrUtil.split(fileTypes, BPanConstant.COMMON_SEPARATOR))
-                    .filter(StringUtils::isNotBlank) // 可选：过滤掉空字符串（根据实际情况决定是否需要）
+                    // 可选：过滤掉空字符串（根据实际情况决定是否需要）
+                    .filter(StringUtils::isNotBlank)
                     .map(Integer::valueOf)
                     .collect(Collectors.toList());
         }
@@ -75,4 +85,18 @@ public class FileController {
 
         return R.data(userFileService.getFileList(context));
     }
+
+    @ApiOperation(
+            value = "创建文件夹",
+            notes = "该接口提供了创建文件夹的功能",
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+    )
+    @PostMapping("file/folder")
+    public R<String> createFolder(@Validated @RequestBody CreateFolderPo createFolderPo) {
+        CreateFolderContext context = fileConverter.createFolderPo2CreateFolderContext(createFolderPo);
+        Long fileId = userFileService.createFolder(context);
+        return R.data(IdUtil.encrypt(fileId));
+    }
+
 }

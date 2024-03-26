@@ -2,6 +2,7 @@ package onem.baymax.pan.server.module.file;
 
 import cn.hutool.core.lang.Assert;
 import onem.baymax.pan.server.BPanServerLauncher;
+import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
 import onem.baymax.pan.server.module.file.service.IUserFileService;
@@ -35,7 +36,6 @@ public class FileTest {
     @Resource
     private IUserService userService;
 
-
     /**
      * 测试用户查询文件列表成功
      */
@@ -54,6 +54,23 @@ public class FileTest {
         assert CollectionUtils.isNotEmpty(result);
     }
 
+    /**
+     * 测试创建文件夹成功
+     */
+    @Test
+    public void testCreateFolderSuccess() {
+
+        Long userId = register();
+        UserInfoVo userInfoVo = info(userId);
+
+        CreateFolderContext context = new CreateFolderContext();
+        context.setParentId(userInfoVo.getRootFileId());
+        context.setUserId(userId);
+        context.setFolderName("folder-name");
+
+        Long fileId = userFileService.createFolder(context);
+        Assert.notNull(fileId);
+    }
 
     private Long register() {
         UserRegisterContext context = createUserRegisterContext();
@@ -62,7 +79,6 @@ public class FileTest {
         return register;
     }
 
-
     private UserInfoVo info(Long userId) {
         UserInfoVo userInfoVO = userService.info(userId);
         Assert.notNull(userInfoVO);
@@ -70,10 +86,12 @@ public class FileTest {
     }
 
     private final static String USERNAME = "baymax";
-    private final static String PASSWORD = "123456789";
-    private final static String QUESTION = "question";
-    private final static String ANSWER = "answer";
 
+    private final static String PASSWORD = "123456789";
+
+    private final static String QUESTION = "question";
+
+    private final static String ANSWER = "answer";
 
     private UserRegisterContext createUserRegisterContext() {
         UserRegisterContext context = new UserRegisterContext();
@@ -83,4 +101,5 @@ public class FileTest {
         context.setAnswer(ANSWER);
         return context;
     }
+
 }
