@@ -1,7 +1,9 @@
 package onem.baymax.pan.server.module.file.converter;
 
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
+import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.po.CreateFolderPo;
+import onem.baymax.pan.server.module.file.po.UpdateFilenamePo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -22,5 +24,9 @@ public interface FileConverter {
     @Mapping(target = "parentId", expression = "java(onem.baymax.pan.core.util.IdUtil.decrypt(createFolderPo.getParentId()))")
     @Mapping(target = "userId", expression = "java(onem.baymax.pan.server.common.util.UserIdUtil.get())")
     CreateFolderContext createFolderPo2CreateFolderContext(CreateFolderPo createFolderPo);
+
+    @Mapping(target = "fileId", expression = "java(onem.baymax.pan.core.util.IdUtil.decrypt(updateFilenamePo.getFileId()))")
+    @Mapping(target = "userId", expression = "java(onem.baymax.pan.server.common.util.UserIdUtil.get())")
+    UpdateFilenameContext updateFilenamePo2UpdateFilenameContext(UpdateFilenamePo updateFilenamePo);
 
 }

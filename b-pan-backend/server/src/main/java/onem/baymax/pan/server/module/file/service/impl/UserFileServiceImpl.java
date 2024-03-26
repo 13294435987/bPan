@@ -8,6 +8,7 @@ import onem.baymax.pan.core.util.IdUtil;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
+import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
 import onem.baymax.pan.server.module.file.enums.FolderFlagEnum;
@@ -19,11 +20,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author hujiabin
- * @description 针对表【b_pan_user_file(用户文件信息表)】的数据库操作Service实现
- * @createDate 2024-03-14 11:22:44
  */
 @Service(value = "userFileService")
 public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUserFile>
@@ -55,14 +55,75 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
         return baseMapper.selectFileList(context);
     }
 
+    @Override
+    public void updateFilename(UpdateFilenameContext context) {
+        // 1、校验更新文件名称的条件
+        checkUpdateFilenameCondition(context);
+        // 2、执行更新文件名称的操作
+        doUpdateFilename(context);
+    }
+
+    /**
+     * 执行文件重命名的操作
+     *
+     * @param context context
+     */
+    private void doUpdateFilename(UpdateFilenameContext context) {
+        BPanUserFile entity = context.getEntity();
+        entity.setFilename(context.getNewFilename());
+        entity.setUpdateUser(context.getUserId());
+        entity.setUpdateTime(new Date());
+
+        if (!updateById(entity)) {
+            throw new BPanBusinessException("文件重命名失败");
+        }
+    }
+
+    /**
+     * 更新文件名称的条件校验
+     * <p>
+     * 1、文件ID是有效的
+     * 2、用户有权限更新该文件的文件名称
+     * 3、新旧文件名称不能一样
+     * 4、不能使用当前文件夹下面的子文件的名称
+     *
+     * @param context context
+     */
+    private void checkUpdateFilenameCondition(UpdateFilenameContext context) {
+        Long fileId = context.getFileId();
+        BPanUserFile entity = getById(fileId);
+
+        if (Objects.isNull(entity)) {
+            throw new BPanBusinessException("该文件ID无效");
+        }
+
+        if (!Objects.equals(entity.getUserId(), context.getUserId())) {
+            throw new BPanBusinessException("当前登录用户没有修改该文件名称的权限");
+        }
+
+        if (Objects.equals(entity.getFilename(), context.getNewFilename())) {
+            throw new BPanBusinessException("请换一个新的文件名称来修改");
+        }
+
+        QueryWrapper<BPanUserFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("parent_id", entity.getParentId());
+        queryWrapper.eq("filename", context.getNewFilename());
+        int count = count(queryWrapper);
+
+        if (count > 0) {
+            throw new BPanBusinessException("该文件名称已被占用");
+        }
+
+        context.setEntity(entity);
+    }
 
     private Long saveUserFile(Long parentId,
-                              String filename,
-                              FolderFlagEnum folderFlagEnum,
-                              Integer fileType,
-                              Long realFileId,
-                              Long userId,
-                              String fileSizeDesc) {
+            String filename,
+            FolderFlagEnum folderFlagEnum,
+            Integer fileType,
+            Long realFileId,
+            Long userId,
+            String fileSizeDesc) {
         // 保存用户文件的映射记录
         BPanUserFile entity = assemblePanUserFile(parentId, userId, filename, folderFlagEnum, fileType, realFileId, fileSizeDesc);
         if (!save((entity))) {
@@ -72,7 +133,7 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
     }
 
     private BPanUserFile assemblePanUserFile(Long parentId, Long userId, String filename, FolderFlagEnum folderFlagEnum,
-                                             Integer fileType, Long realFileId, String fileSizeDesc) {
+            Integer fileType, Long realFileId, String fileSizeDesc) {
         // 用户文件映射关系实体转化
         // 构建并填充实体
         BPanUserFile entity = new BPanUserFile();
@@ -146,6 +207,7 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
                 FileConstant.CN_RIGHT_PARENTHESES_STR +
                 newFilenameSuffix;
     }
+
 }
 
 

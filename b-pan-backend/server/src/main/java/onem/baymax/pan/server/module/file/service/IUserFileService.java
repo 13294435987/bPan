@@ -2,6 +2,7 @@ package onem.baymax.pan.server.module.file.service;
 
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
+import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
 import com.baomidou.mybatisplus.extension.service.IService;
 import onem.baymax.pan.server.module.file.vo.BPanUserFileVo;
@@ -10,8 +11,6 @@ import java.util.List;
 
 /**
  * @author hujiabin
- * @description 针对表【b_pan_user_file(用户文件信息表)】的数据库操作Service
- * @createDate 2024-03-14 11:22:44
  */
 public interface IUserFileService extends IService<BPanUserFile> {
 
@@ -38,4 +37,12 @@ public interface IUserFileService extends IService<BPanUserFile> {
      * @return list
      */
     List<BPanUserFileVo> getFileList(QueryFileListContext context);
+
+    /**
+     * 更新文件名称
+     *
+     * @param context context
+     */
+    void updateFilename(UpdateFilenameContext context);
+
 }
