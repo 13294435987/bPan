@@ -9,17 +9,20 @@ import onem.baymax.pan.core.util.IdUtil;
 import onem.baymax.pan.server.common.util.UserIdUtil;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
+import onem.baymax.pan.server.module.file.context.DeleteFileContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.converter.FileConverter;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
 import onem.baymax.pan.server.module.file.po.CreateFolderPo;
+import onem.baymax.pan.server.module.file.po.DeleteFilePo;
 import onem.baymax.pan.server.module.file.po.UpdateFilenamePo;
 import onem.baymax.pan.server.module.file.service.IUserFileService;
 import onem.baymax.pan.server.module.file.vo.BPanUserFileVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import com.google.common.base.Splitter;
 
 /**
  * 操作文件接口
@@ -110,6 +114,7 @@ public class FileController {
 
     /**
      * 重命名
+     *
      * @param updateFilenamePo po
      * @return r
      */
@@ -123,6 +128,25 @@ public class FileController {
     public R<String> updateFilename(@Validated @RequestBody UpdateFilenamePo updateFilenamePo) {
         UpdateFilenameContext context = fileConverter.updateFilenamePo2UpdateFilenameContext(updateFilenamePo);
         userFileService.updateFilename(context);
+        return R.success();
+    }
+
+    @ApiOperation(
+            value = "批量删除文件",
+            notes = "该接口提供了批量删除文件的功能",
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+    )
+    @DeleteMapping("file")
+    public R<String> deleteFile(@Validated @RequestBody DeleteFilePo deleteFilePo) {
+        DeleteFileContext context = fileConverter.deleteFilePo2DeleteFileContext(deleteFilePo);
+
+        String fileIds = deleteFilePo.getFileIds();
+        List<Long> fileIdList = Arrays.stream(StringUtils.split(fileIds, BPanConstant.COMMON_SEPARATOR)).map(IdUtil::decrypt)
+                .collect(Collectors.toList());
+
+        context.setFileIdList(fileIdList);
+        userFileService.deleteFile(context);
         return R.success();
     }
 

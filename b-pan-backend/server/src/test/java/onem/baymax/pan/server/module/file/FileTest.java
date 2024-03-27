@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Assert;
 import onem.baymax.pan.core.exception.BPanBusinessException;
 import onem.baymax.pan.server.BPanServerLauncher;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
+import onem.baymax.pan.server.module.file.context.DeleteFileContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import com.google.common.collect.Lists;
 
 /**
  * FileTest
@@ -199,6 +201,81 @@ public class FileTest {
         updateFilenameContext.setNewFilename("folder-name-new");
 
         userFileService.updateFilename(updateFilenameContext);
+    }
+
+    /**
+     * 校验文件删除失败-非法的文件ID
+     */
+    @Test(expected = BPanBusinessException.class)
+    public void testDeleteFileFailByWrongFileId() {
+        Long userId = register();
+        UserInfoVo userInfoVO = info(userId);
+
+        CreateFolderContext context = new CreateFolderContext();
+        context.setParentId(userInfoVO.getRootFileId());
+        context.setUserId(userId);
+        context.setFolderName("folder-name-old");
+
+        Long fileId = userFileService.createFolder(context);
+        Assert.notNull(fileId);
+
+        DeleteFileContext deleteFileContext = new DeleteFileContext();
+        List<Long> fileIdList = Lists.newArrayList();
+        fileIdList.add(fileId + 1);
+        deleteFileContext.setFileIdList(fileIdList);
+        deleteFileContext.setUserId(userId);
+
+        userFileService.deleteFile(deleteFileContext);
+    }
+
+    /**
+     * 校验文件删除失败-非法的用户ID
+     */
+    @Test(expected = BPanBusinessException.class)
+    public void testDeleteFileFailByWrongUserId() {
+        Long userId = register();
+        UserInfoVo userInfoVO = info(userId);
+
+        CreateFolderContext context = new CreateFolderContext();
+        context.setParentId(userInfoVO.getRootFileId());
+        context.setUserId(userId);
+        context.setFolderName("folder-name-old");
+
+        Long fileId = userFileService.createFolder(context);
+        Assert.notNull(fileId);
+
+        DeleteFileContext deleteFileContext = new DeleteFileContext();
+        List<Long> fileIdList = Lists.newArrayList();
+        fileIdList.add(fileId);
+        deleteFileContext.setFileIdList(fileIdList);
+        deleteFileContext.setUserId(userId + 1);
+
+        userFileService.deleteFile(deleteFileContext);
+    }
+
+    /**
+     * 校验用户删除文件成功
+     */
+    @Test
+    public void testDeleteFileSuccess() {
+        Long userId = register();
+        UserInfoVo userInfoVO = info(userId);
+
+        CreateFolderContext context = new CreateFolderContext();
+        context.setParentId(userInfoVO.getRootFileId());
+        context.setUserId(userId);
+        context.setFolderName("folder-name-old");
+
+        Long fileId = userFileService.createFolder(context);
+        Assert.notNull(fileId);
+
+        DeleteFileContext deleteFileContext = new DeleteFileContext();
+        List<Long> fileIdList = Lists.newArrayList();
+        fileIdList.add(fileId);
+        deleteFileContext.setFileIdList(fileIdList);
+        deleteFileContext.setUserId(userId);
+
+        userFileService.deleteFile(deleteFileContext);
     }
 
     private Long register() {

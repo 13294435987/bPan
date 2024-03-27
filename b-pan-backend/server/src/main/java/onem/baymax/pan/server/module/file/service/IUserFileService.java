@@ -1,6 +1,7 @@
 package onem.baymax.pan.server.module.file.service;
 
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
+import onem.baymax.pan.server.module.file.context.DeleteFileContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
@@ -44,5 +45,12 @@ public interface IUserFileService extends IService<BPanUserFile> {
      * @param context context
      */
     void updateFilename(UpdateFilenameContext context);
+
+    /**
+     * 删除文件
+     *
+     * @param context context
+     */
+    void deleteFile(DeleteFileContext context);
 
 }

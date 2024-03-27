@@ -1,12 +1,16 @@
 package onem.baymax.pan.server.module.file.service.impl;
 
+import javax.annotation.Nonnull;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import onem.baymax.pan.core.constant.BPanConstant;
 import onem.baymax.pan.core.exception.BPanBusinessException;
 import onem.baymax.pan.core.util.IdUtil;
+import onem.baymax.pan.server.common.event.file.DeleteFileEvent;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
+import onem.baymax.pan.server.module.file.context.DeleteFileContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
@@ -16,18 +20,25 @@ import onem.baymax.pan.server.module.file.service.IUserFileService;
 import onem.baymax.pan.server.module.file.mapper.BPanUserFileMapper;
 import onem.baymax.pan.server.module.file.vo.BPanUserFileVo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author hujiabin
  */
 @Service(value = "userFileService")
 public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUserFile>
-        implements IUserFileService {
+        implements IUserFileService, ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
 
     @Override
     public Long createFolder(CreateFolderContext createFolderContext) {
@@ -61,6 +72,68 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
         checkUpdateFilenameCondition(context);
         // 2、执行更新文件名称的操作
         doUpdateFilename(context);
+    }
+
+    @Override
+    public void deleteFile(DeleteFileContext context) {
+        checkFileDeleteCondition(context);
+        doDeleteFile(context);
+        afterFileDelete(context);
+    }
+
+    private void afterFileDelete(DeleteFileContext context) {
+        DeleteFileEvent deleteFileEvent = new DeleteFileEvent(this, context.getFileIdList());
+        applicationContext.publishEvent(deleteFileEvent);
+    }
+
+    private void doDeleteFile(DeleteFileContext context) {
+        List<Long> fileIdList = context.getFileIdList();
+
+        UpdateWrapper<BPanUserFile> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("file_id", fileIdList);
+        updateWrapper.set("del_flag", DelFlagEnum.YES.getCode());
+        updateWrapper.set("update_time", new Date());
+
+        if (!update(updateWrapper)) {
+            throw new BPanBusinessException("文件删除失败");
+        }
+    }
+
+    /**
+     * 删除文件之前的前置校验
+     * <p>
+     * 1、文件ID合法校验
+     * 2、用户拥有删除该文件的权限
+     *
+     * @param context context
+     */
+    private void checkFileDeleteCondition(DeleteFileContext context) {
+        List<Long> fileIdList = context.getFileIdList();
+
+        List<BPanUserFile> bPanUserFiles = listByIds(fileIdList);
+        if (bPanUserFiles.size() != fileIdList.size()) {
+            throw new BPanBusinessException("存在不合法的文件记录");
+        }
+
+        Set<Long> fieldIdSet = bPanUserFiles.stream().map(BPanUserFile::getFileId).collect(Collectors.toSet());
+        int oldSize = fieldIdSet.size();
+        fieldIdSet.addAll(fileIdList);
+        int newSize = fieldIdSet.size();
+
+        if (oldSize != newSize) {
+            throw new BPanBusinessException("存在不合法的文件记录");
+        }
+
+        Set<Long> userIdSet = bPanUserFiles.stream().map(BPanUserFile::getUserId).collect(Collectors.toSet());
+        if (userIdSet.size() != 1) {
+            throw new BPanBusinessException("存在不合法的文件记录");
+        }
+
+        Long dbUserId = userIdSet.stream().findFirst().get();
+        if (!Objects.equals(dbUserId, context.getUserId())) {
+            throw new BPanBusinessException("当前登录用户没有删除该文件的权限");
+        }
+
     }
 
     /**
@@ -206,6 +279,10 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
                 count +
                 FileConstant.CN_RIGHT_PARENTHESES_STR +
                 newFilenameSuffix;
+    }
+
+    @Override public void setApplicationContext(@Nonnull ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
 }
