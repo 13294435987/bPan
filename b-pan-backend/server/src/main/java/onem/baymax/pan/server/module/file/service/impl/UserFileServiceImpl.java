@@ -1,24 +1,32 @@
 package onem.baymax.pan.server.module.file.service.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Resource;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import onem.baymax.pan.core.constant.BPanConstant;
 import onem.baymax.pan.core.exception.BPanBusinessException;
+import onem.baymax.pan.core.util.FileUtils;
 import onem.baymax.pan.core.util.IdUtil;
 import onem.baymax.pan.server.common.event.file.DeleteFileEvent;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
+import onem.baymax.pan.server.module.file.context.QueryRealFileListContext;
+import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
+import onem.baymax.pan.server.module.file.entity.BPanFile;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
+import onem.baymax.pan.server.module.file.enums.FileTypeEnum;
 import onem.baymax.pan.server.module.file.enums.FolderFlagEnum;
+import onem.baymax.pan.server.module.file.service.IFileService;
 import onem.baymax.pan.server.module.file.service.IUserFileService;
 import onem.baymax.pan.server.module.file.mapper.BPanUserFileMapper;
 import onem.baymax.pan.server.module.file.vo.BPanUserFileVo;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -39,6 +47,9 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
         implements IUserFileService, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
+
+    @Resource
+    private IFileService fileService;
 
     @Override
     public Long createFolder(CreateFolderContext createFolderContext) {
@@ -79,6 +90,36 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
         checkFileDeleteCondition(context);
         doDeleteFile(context);
         afterFileDelete(context);
+    }
+
+    /**
+     * 文件秒传功能
+     * <p>
+     * 1、判断用户之前是否上传过该文件
+     * 2、如果上传过该文件，只需要生成一个该文件和当前用户在指定文件夹下面的关联关系即可
+     *
+     * @param context context
+     * @return true 代表用户之前上传过相同文件并成功挂在了关联关系 false 用户没有上传过该文件，请手动执行上传逻辑
+     */
+    @Override public boolean secUpload(SecUploadFileContext context) {
+        List<BPanFile> fileList = getFileListByUserIdAndIdentifier(context.getUserId(), context.getIdentifier());
+        if (CollectionUtils.isEmpty(fileList)) {
+            return false;
+        }
+        BPanFile record = fileList.get(BPanConstant.ZERO_INT);
+        if (Objects.nonNull(record)) {
+            // 生成一个该文件和当前用户在指定文件夹下面的关联关系
+            saveUserFile(context.getParentId(),
+                    context.getFilename(),
+                    FolderFlagEnum.NO,
+                    FileTypeEnum.getFileTypeCode(FileUtils.getFileSuffix(context.getFilename())),
+                    record.getFileId(),
+                    context.getUserId(),
+                    record.getFileSizeDesc());
+            return true;
+        }
+
+        return false;
     }
 
     private void afterFileDelete(DeleteFileContext context) {
@@ -279,6 +320,20 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
                 count +
                 FileConstant.CN_RIGHT_PARENTHESES_STR +
                 newFilenameSuffix;
+    }
+
+    /**
+     * 查询用户文件列表根据文件的唯一标识
+     *
+     * @param userId 用户id
+     * @param identifier 文件唯一标识
+     * @return list
+     */
+    private List<BPanFile> getFileListByUserIdAndIdentifier(Long userId, String identifier) {
+        QueryRealFileListContext context = new QueryRealFileListContext();
+        context.setUserId(userId);
+        context.setIdentifier(identifier);
+        return fileService.getFileList(context);
     }
 
     @Override public void setApplicationContext(@Nonnull ApplicationContext applicationContext) throws BeansException {

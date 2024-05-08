@@ -3,6 +3,7 @@ package onem.baymax.pan.server.module.file.service;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
+import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -52,5 +53,13 @@ public interface IUserFileService extends IService<BPanUserFile> {
      * @param context context
      */
     void deleteFile(DeleteFileContext context);
+
+    /**
+     * 文件秒传
+     *
+     * @param context 上下文对象
+     * @return true/false
+     */
+    boolean secUpload(SecUploadFileContext context);
 
 }

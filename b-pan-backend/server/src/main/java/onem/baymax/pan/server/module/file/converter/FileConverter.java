@@ -2,9 +2,11 @@ package onem.baymax.pan.server.module.file.converter;
 
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
+import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.po.CreateFolderPo;
 import onem.baymax.pan.server.module.file.po.DeleteFilePo;
+import onem.baymax.pan.server.module.file.po.SecUploadFilePo;
 import onem.baymax.pan.server.module.file.po.UpdateFilenamePo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -33,5 +35,9 @@ public interface FileConverter {
 
     @Mapping(target = "userId", expression = "java(onem.baymax.pan.server.common.util.UserIdUtil.get())")
     DeleteFileContext deleteFilePo2DeleteFileContext(DeleteFilePo deleteFilePo);
+
+    @Mapping(target = "parentId", expression = "java(onem.baymax.pan.core.utils.IdUtil.decrypt(secUploadFilePo.getParentId()))")
+    @Mapping(target = "userId", expression = "java(onem.baymax.pan.server.common.utils.UserIdUtil.get())")
+    SecUploadFileContext secUploadFilePo2SecUploadFileContext(SecUploadFilePo secUploadFilePo);
 
 }

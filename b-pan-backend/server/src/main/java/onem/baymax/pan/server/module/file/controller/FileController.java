@@ -11,11 +11,13 @@ import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
+import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.converter.FileConverter;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
 import onem.baymax.pan.server.module.file.po.CreateFolderPo;
 import onem.baymax.pan.server.module.file.po.DeleteFilePo;
+import onem.baymax.pan.server.module.file.po.SecUploadFilePo;
 import onem.baymax.pan.server.module.file.po.UpdateFilenamePo;
 import onem.baymax.pan.server.module.file.service.IUserFileService;
 import onem.baymax.pan.server.module.file.vo.BPanUserFileVo;
@@ -36,7 +38,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import com.google.common.base.Splitter;
 
 /**
  * 操作文件接口
@@ -148,6 +149,22 @@ public class FileController {
         context.setFileIdList(fileIdList);
         userFileService.deleteFile(context);
         return R.success();
+    }
+
+    @ApiOperation(
+            value = "文件秒传",
+            notes = "该接口提供了文件秒传的功能",
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+    )
+    @PostMapping("file/sec-upload")
+    public R<String> secUpload(@Validated @RequestBody SecUploadFilePo secUploadFilePo) {
+        SecUploadFileContext context = fileConverter.secUploadFilePo2SecUploadFileContext(secUploadFilePo);
+        boolean result = userFileService.secUpload(context);
+        if (result) {
+            return R.success();
+        }
+        return R.fail("文件唯一标识不存在，请手动执行文件上传");
     }
 
 }
