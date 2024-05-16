@@ -4,23 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>onem.baymax.pan</groupId>
-        <artifactId>b-pan-parent</artifactId>
+        <groupId>onem.baymax</groupId>
+        <artifactId>b-pan-storage-engine</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>b-pan-framework</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>core</module>
-        <module>web</module>
-        <module>swagger2</module>
-        <module>orm</module>
-        <module>orm/mybatis-plus</module>
-        <module>cache</module>
-        <module>schedule</module>
-        <module>storage-engine</module>
-    </modules>
+    <artifactId>b-pan-storage-engine-fastdfs</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -28,4 +17,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>onem.baymax</groupId>
+            <artifactId>b-pan-storage-engine-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

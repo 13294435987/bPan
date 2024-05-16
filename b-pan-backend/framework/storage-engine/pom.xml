@@ -5,21 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>onem.baymax.pan</groupId>
-        <artifactId>b-pan-parent</artifactId>
+        <artifactId>b-pan-framework</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>b-pan-framework</artifactId>
+    <groupId>onem.baymax</groupId>
+    <artifactId>b-pan-storage-engine</artifactId>
+
     <packaging>pom</packaging>
     <modules>
-        <module>core</module>
-        <module>web</module>
-        <module>swagger2</module>
-        <module>orm</module>
-        <module>orm/mybatis-plus</module>
-        <module>cache</module>
-        <module>schedule</module>
-        <module>storage-engine</module>
+        <module>storage-engine-core</module>
+        <module>storage-engine-local</module>
+        <module>storage-engine-oss</module>
+        <module>storage-engine-fastdfs</module>
     </modules>
 
     <properties>
