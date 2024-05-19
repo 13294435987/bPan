@@ -13,10 +13,13 @@ import onem.baymax.pan.server.common.event.file.DeleteFileEvent;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
+import onem.baymax.pan.server.module.file.context.FileSaveContext;
+import onem.baymax.pan.server.module.file.context.FileUploadContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.context.QueryRealFileListContext;
 import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
+import onem.baymax.pan.server.module.file.converter.FileConverter;
 import onem.baymax.pan.server.module.file.entity.BPanFile;
 import onem.baymax.pan.server.module.file.entity.BPanUserFile;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
@@ -32,6 +35,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -50,6 +54,9 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
 
     @Resource
     private IFileService fileService;
+
+    @Resource
+    private FileConverter fileConverter;
 
     @Override
     public Long createFolder(CreateFolderContext createFolderContext) {
@@ -120,6 +127,38 @@ public class UserFileServiceImpl extends ServiceImpl<BPanUserFileMapper, BPanUse
         }
 
         return false;
+    }
+
+    /**
+     * 单文件上传
+     * <p>
+     * 1、上传文件并保存实体文件的记录
+     * 2、保存用户文件的关系记录
+     *
+     * @param context context
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override public void upload(FileUploadContext context) {
+        saveFile(context);
+        saveUserFile(context.getParentId(),
+                context.getFilename(),
+                FolderFlagEnum.NO,
+                FileTypeEnum.getFileTypeCode(FileUtils.getFileSuffix(context.getFilename())),
+                context.getRecord().getFileId(),
+                context.getUserId(),
+                context.getRecord().getFileSizeDesc());
+    }
+
+    /**
+     * 上传文件并保存实体文件记录
+     * 委托给实体文件的Service去完成该操作
+     *
+     * @param context context
+     */
+    private void saveFile(FileUploadContext context) {
+        FileSaveContext fileSaveContext = fileConverter.fileUploadContext2FileSaveContext(context);
+        fileService.saveFile(fileSaveContext);
+        context.setRecord(fileSaveContext.getRecord());
     }
 
     private void afterFileDelete(DeleteFileContext context) {

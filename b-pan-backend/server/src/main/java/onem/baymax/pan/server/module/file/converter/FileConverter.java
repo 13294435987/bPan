@@ -2,10 +2,13 @@ package onem.baymax.pan.server.module.file.converter;
 
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
+import onem.baymax.pan.server.module.file.context.FileSaveContext;
+import onem.baymax.pan.server.module.file.context.FileUploadContext;
 import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
 import onem.baymax.pan.server.module.file.po.CreateFolderPo;
 import onem.baymax.pan.server.module.file.po.DeleteFilePo;
+import onem.baymax.pan.server.module.file.po.FileUploadPo;
 import onem.baymax.pan.server.module.file.po.SecUploadFilePo;
 import onem.baymax.pan.server.module.file.po.UpdateFilenamePo;
 import org.mapstruct.Mapper;
@@ -39,5 +42,12 @@ public interface FileConverter {
     @Mapping(target = "parentId", expression = "java(onem.baymax.pan.core.utils.IdUtil.decrypt(secUploadFilePo.getParentId()))")
     @Mapping(target = "userId", expression = "java(onem.baymax.pan.server.common.utils.UserIdUtil.get())")
     SecUploadFileContext secUploadFilePo2SecUploadFileContext(SecUploadFilePo secUploadFilePo);
+
+    @Mapping(target = "parentId", expression = "java(onem.baymax.pan.core.utils.IdUtil.decrypt(fileUploadPo.getParentId()))")
+    @Mapping(target = "userId", expression = "java(onem.baymax.pan.server.common.utils.UserIdUtil.get())")
+    FileUploadContext fileUploadPo2FileUploadContext(FileUploadPo fileUploadPo);
+
+    @Mapping(target = "record", ignore = true)
+    FileSaveContext fileUploadContext2FileSaveContext(FileUploadContext context);
 
 }

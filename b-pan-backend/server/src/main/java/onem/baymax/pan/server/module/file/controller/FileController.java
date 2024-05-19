@@ -10,6 +10,7 @@ import onem.baymax.pan.server.common.util.UserIdUtil;
 import onem.baymax.pan.server.module.file.constant.FileConstant;
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
+import onem.baymax.pan.server.module.file.context.FileUploadContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
@@ -17,6 +18,7 @@ import onem.baymax.pan.server.module.file.converter.FileConverter;
 import onem.baymax.pan.server.module.file.enums.DelFlagEnum;
 import onem.baymax.pan.server.module.file.po.CreateFolderPo;
 import onem.baymax.pan.server.module.file.po.DeleteFilePo;
+import onem.baymax.pan.server.module.file.po.FileUploadPo;
 import onem.baymax.pan.server.module.file.po.SecUploadFilePo;
 import onem.baymax.pan.server.module.file.po.UpdateFilenamePo;
 import onem.baymax.pan.server.module.file.service.IUserFileService;
@@ -165,6 +167,19 @@ public class FileController {
             return R.success();
         }
         return R.fail("文件唯一标识不存在，请手动执行文件上传");
+    }
+
+    @ApiOperation(
+            value = "单文件上传",
+            notes = "该接口提供了单文件上传的功能",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+    )
+    @PostMapping("file/upload")
+    public R<String> upload(@Validated FileUploadPo fileUploadPo) {
+        FileUploadContext context = fileConverter.fileUploadPo2FileUploadContext(fileUploadPo);
+        userFileService.upload(context);
+        return R.success();
     }
 
 }

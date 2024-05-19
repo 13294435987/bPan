@@ -2,6 +2,7 @@ package onem.baymax.pan.server.module.file.service;
 
 import onem.baymax.pan.server.module.file.context.CreateFolderContext;
 import onem.baymax.pan.server.module.file.context.DeleteFileContext;
+import onem.baymax.pan.server.module.file.context.FileUploadContext;
 import onem.baymax.pan.server.module.file.context.QueryFileListContext;
 import onem.baymax.pan.server.module.file.context.SecUploadFileContext;
 import onem.baymax.pan.server.module.file.context.UpdateFilenameContext;
@@ -61,5 +62,12 @@ public interface IUserFileService extends IService<BPanUserFile> {
      * @return true/false
      */
     boolean secUpload(SecUploadFileContext context);
+
+    /**
+     * 上传文件
+     *
+     * @param context 上下文对象
+     */
+    void upload(FileUploadContext context);
 
 }

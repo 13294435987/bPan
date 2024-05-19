@@ -37,25 +37,25 @@
             <artifactId>b-pan-mybatis-plus</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-                <dependency>
-                    <groupId>onem.baymax.pan</groupId>
-                    <artifactId>b-pan-schedule</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-                </dependency>
-                <dependency>
-                    <groupId>onem.baymax.pan</groupId>
-                    <artifactId>b-pan-cache-redis</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-                </dependency>
+        <dependency>
+            <groupId>onem.baymax.pan</groupId>
+            <artifactId>b-pan-schedule</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>onem.baymax.pan</groupId>
+            <artifactId>b-pan-cache-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>onem.baymax.pan</groupId>-->
-        <!--            <artifactId>b-pan-storage-engine-local</artifactId>-->
-        <!--            <version>1.0</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>onem.baymax</groupId>
+            <artifactId>b-pan-storage-engine-local</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--        <dependency>-->
         <!--            <groupId>onem.baymax.pan</groupId>-->
         <!--            <artifactId>b-pan-storage-engine-fastdfs</artifactId>-->
